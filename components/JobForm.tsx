@@ -81,7 +81,7 @@ export default function JobForm({ initialData, onSave }: JobFormProps) {
   };
 
   return (
-    <div className="glass-panel" style={{ padding: '32px' }}>
+    <div className="glass-panel responsive-card">
       <div className="flex items-center gap-3 mb-8">
         <div className="logo-icon" style={{ width: '48px', height: '48px', borderRadius: '12px' }}>
           <Edit3 size={24} />

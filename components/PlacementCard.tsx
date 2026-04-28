@@ -56,14 +56,14 @@ export default function PlacementCard({ data, imagePath }: PlacementCardProps) {
   ];
 
   return (
-    <div className="glass-panel info-card fade-in" style={{ padding: '40px' }}>
+    <div className="glass-panel info-card fade-in responsive-card">
       <div className="card-header" style={{ marginBottom: '48px' }}>
         <div className="logo-icon" style={{ width: '80px', height: '80px', borderRadius: '20px' }}>
           <Building2 size={40} />
         </div>
         <div style={{ flex: 1 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '8px' }}>
-            <h3 style={{ fontSize: '36px', fontWeight: '900', color: '#1e1b4b', letterSpacing: '-0.02em' }}>
+            <h3 className="card-company-name">
               {data.company_name || "Unknown Company"}
             </h3>
             <span className="status-badge" style={{ background: '#f0fdf4', color: '#166534', border: '1px solid #bbf7d0', padding: '6px 12px' }}>

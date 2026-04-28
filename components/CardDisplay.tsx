@@ -22,7 +22,7 @@ export default function CardDisplay({ data, imagePath }: CardDisplayProps) {
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '24px' }}>
         
         {/* Card Data Panel */}
-        <div className="glass-panel" style={{ padding: '32px' }}>
+        <div className="glass-panel responsive-card">
           <div className="flex items-center gap-3 mb-8">
             <div className="logo-icon" style={{ background: '#3b82f615', color: '#3b82f6' }}>
               <BadgeCheck size={20} />
@@ -49,7 +49,7 @@ export default function CardDisplay({ data, imagePath }: CardDisplayProps) {
 
         {/* Card Image Panel */}
         {imagePath && (
-          <div className="glass-panel" style={{ padding: '24px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          <div className="glass-panel responsive-card" style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
             <div className="flex justify-between items-center">
               <h4 style={{ fontSize: '14px', fontWeight: '800', color: 'var(--text-muted)' }}>ORIGINAL IMAGE</h4>
               <a href={imagePath} target="_blank" rel="noreferrer" style={{ fontSize: '12px', color: 'var(--primary)', fontWeight: '700', textDecoration: 'none' }}>View Full Size</a>

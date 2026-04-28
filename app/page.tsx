@@ -237,12 +237,16 @@ export default function Home() {
         {/* Mobile Header (Hidden on Desktop) */}
         <div className="md:hidden glass m-4 p-4 flex items-center justify-between sticky top-4 z-50">
           <div className="flex items-center gap-2">
-            <Briefcase className="text-primary" size={20} />
-            <span className="font-bold">PlacementAI</span>
+            <div className="logo-icon" style={{ width: '32px', height: '32px', borderRadius: '8px' }}>
+              <Briefcase size={16} />
+            </div>
+            <span className="font-bold text-primary">PlacementAI</span>
           </div>
-          <button onClick={() => setView(view === 'history' ? 'upload' : 'history')}>
-            {view === 'history' ? <LayoutDashboard size={22} /> : <History size={22} />}
-          </button>
+          <div className="flex items-center gap-3">
+            <div className="hero-badge" style={{ margin: 0, padding: '4px 10px', fontSize: '10px' }}>
+              {view === 'upload' ? 'Dashboard' : view === 'cards' ? 'Card Scan' : view === 'history' ? 'History' : 'Details'}
+            </div>
+          </div>
         </div>
 
         <div className="workspace-container">
@@ -259,6 +263,53 @@ export default function Home() {
                 <p className="hero-subtitle">
                   Stop manually typing details. Upload any placement image and let our AI extract company details, CTC, and eligibility in seconds.
                 </p>
+
+                {/* Mobile Quick Actions (Visible only on Mobile) */}
+                <div className="md:hidden mt-10">
+                  <div className="sidebar-promo" style={{ margin: 0, background: '#eef2ff', border: '1px solid rgba(139, 92, 246, 0.1)', padding: '24px' }}>
+                    <div className="flex items-center gap-3 text-primary mb-3">
+                      <Sparkles size={18} />
+                      <span className="text-xs font-bold uppercase tracking-wider">Start Scanning</span>
+                    </div>
+                    <p className="text-xs text-text-muted mb-6">
+                      Quickly scan a new poster or card, or enter details manually.
+                    </p>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '12px' }}>
+                      <button
+                        onClick={() => setView("upload")}
+                        className="btn-primary w-full"
+                        style={{ padding: '14px', borderRadius: '16px' }}
+                      >
+                        <PlusCircle size={18} />
+                        <span>New Job Scan</span>
+                      </button>
+                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+                        <button
+                          onClick={() => setView("cards")}
+                          style={{ padding: '14px', background: 'white', border: '1px solid #e2e8f0', borderRadius: '16px', fontWeight: '700', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', color: '#1e1b4b', fontSize: '13px' }}
+                        >
+                          <Camera size={16} />
+                          <span>Card Scan</span>
+                        </button>
+                        <button
+                          onClick={() => {
+                            setCurrentPlacement({
+                              id: "manual-" + Date.now(),
+                              extraction: {},
+                              imagePath: "",
+                              companyName: ""
+                            });
+                            setView("details");
+                          }}
+                          style={{ padding: '14px', background: 'white', border: '1px solid #e2e8f0', borderRadius: '16px', color: 'var(--text-muted)', fontWeight: '700', fontSize: '13px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
+                        >
+                          <Edit3 size={16} />
+                          <span>Manual</span>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
 
               <FileUploader onUploadSuccess={handleUploadSuccess} />
@@ -419,7 +470,7 @@ export default function Home() {
               </div>
 
               {history.length === 0 ? (
-                <div className="glass-panel" style={{ padding: '80px', textAlign: 'center' }}>
+                <div className="glass-panel responsive-card" style={{ textAlign: 'center' }}>
                   <div className="logo-icon" style={{ width: '80px', height: '80px', margin: '0 auto 24px', background: '#eef2ff', color: 'var(--primary)' }}>
                     <History size={40} />
                   </div>
@@ -471,25 +522,54 @@ export default function Home() {
         </div>
 
         {/* Footer */}
-        <footer style={{ marginTop: 'auto', padding: '60px 24px', borderTop: '1px solid var(--sidebar-border)' }}>
-          <div className="workspace-container" style={{ padding: 0, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <div className="flex items-center gap-3">
-              <div className="logo-icon" style={{ width: '32px', height: '32px', borderRadius: '8px' }}>
+        <footer className="app-footer">
+          <div className="footer-container">
+            <div className="footer-brand">
+              <div className="logo-icon footer-logo">
                 <Briefcase size={16} />
               </div>
-              <span style={{ fontWeight: '800' }}>PlacementAI</span>
+              <span className="footer-logo-text">PlacementAI</span>
             </div>
 
-            <p style={{ fontSize: '14px', color: 'var(--text-muted)' }}>
-              Intelligence by <span style={{ color: '#1e1b4b', fontWeight: '700' }}>Gemma & OpenRouter</span>
+            <p className="footer-credits">
+              Intelligence by <span className="font-bold">Gemma & OpenRouter</span>
             </p>
 
-            <div style={{ display: 'flex', gap: '24px', fontSize: '14px', fontWeight: '700' }}>
-              <Link href="/docs" style={{ color: 'var(--text-muted)', textDecoration: 'none' }}>Docs</Link>
+            <div className="footer-links">
+              <Link href="/docs" className="footer-link">Docs</Link>
             </div>
           </div>
         </footer>
       </main>
+
+      {/* Bottom Navigation for Mobile */}
+      <nav className="bottom-nav">
+        <button 
+          onClick={() => setView("upload")} 
+          className={`bottom-nav-item ${view === "upload" || view === "details" ? "active" : ""}`}
+        >
+          <LayoutDashboard size={22} />
+          <span>Dashboard</span>
+        </button>
+        
+        <button 
+          onClick={() => setView("cards")} 
+          className={`bottom-nav-item ${view === "cards" ? "active" : ""}`}
+        >
+          <div className="fab-button">
+            <Camera size={24} />
+          </div>
+          <span>Scan Card</span>
+        </button>
+
+        <button 
+          onClick={() => setView("history")} 
+          className={`bottom-nav-item ${view === "history" ? "active" : ""}`}
+        >
+          <History size={22} />
+          <span>History</span>
+        </button>
+      </nav>
     </div>
   );
 }
