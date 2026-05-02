@@ -1,8 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { Upload, X, Loader2, Image as ImageIcon, FileText, Sparkles, Camera } from "lucide-react";
+import { Upload, X, Loader2, Image as ImageIcon, FileText, Sparkles, Camera, Crop } from "lucide-react";
 import { api } from "@/lib/api";
+import Cropper from "react-easy-crop";
+import { getCroppedImg } from "@/lib/imageUtils";
 
 interface FileUploaderProps {
   onUploadSuccess: (data: any | any[]) => void;
@@ -19,6 +21,10 @@ export default function FileUploader({ onUploadSuccess, endpoint = "/api/analyze
   const [currentFileIndex, setCurrentFileIndex] = useState(-1);
   const [error, setError] = useState<string | null>(null);
   const [isDragging, setIsDragging] = useState(false);
+  const [isCropping, setIsCropping] = useState(false);
+  const [crop, setCrop] = useState({ x: 0, y: 0 });
+  const [zoom, setZoom] = useState(1);
+  const [croppedAreaPixels, setCroppedAreaPixels] = useState<any>(null);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement> | React.DragEvent) => {
     let selectedFiles: File[] = [];
@@ -149,6 +155,27 @@ export default function FileUploader({ onUploadSuccess, endpoint = "/api/analyze
     }
   };
 
+  const onCropComplete = (croppedArea: any, croppedAreaPixels: any) => {
+    setCroppedAreaPixels(croppedAreaPixels);
+  };
+
+  const handleCropSave = async () => {
+    if (!preview || !croppedAreaPixels) return;
+
+    try {
+      const croppedBlob = await getCroppedImg(preview, croppedAreaPixels);
+      if (croppedBlob) {
+        const croppedFile = new File([croppedBlob], files[0].name, { type: "image/jpeg" });
+        setFiles([croppedFile]);
+        setPreview(URL.createObjectURL(croppedFile));
+        setIsCropping(false);
+      }
+    } catch (e) {
+      console.error("Failed to crop image:", e);
+      setError("Failed to crop image");
+    }
+  };
+
   return (
     <div className="glass-panel uploader-root">
       <div className="uploader-tabs">
@@ -255,6 +282,27 @@ export default function FileUploader({ onUploadSuccess, endpoint = "/api/analyze
                         <span className="font-bold">Add more files</span>
                       </div>
                     </div>
+                  )}
+                  {files.length === 1 && !isCropping && (
+                    <button
+                      onClick={() => setIsCropping(true)}
+                      className="btn-secondary"
+                      style={{ 
+                        position: 'absolute', 
+                        bottom: '12px', 
+                        left: '50%', 
+                        transform: 'translateX(-50%)', 
+                        background: 'rgba(255, 255, 255, 0.9)', 
+                        backdropFilter: 'blur(4px)', 
+                        padding: '8px 16px', 
+                        fontSize: '12px', 
+                        borderRadius: '20px', 
+                        boxShadow: '0 4px 12px rgba(0,0,0,0.1)' 
+                      }}
+                    >
+                      <Crop size={14} />
+                      <span>Crop Image</span>
+                    </button>
                   )}
                 </div>
                 <button
@@ -368,6 +416,42 @@ export default function FileUploader({ onUploadSuccess, endpoint = "/api/analyze
                 style={{ width: '100%', padding: '12px', background: 'none', border: 'none', color: 'var(--text-muted)', fontWeight: '700', fontSize: '14px', cursor: 'pointer' }}
               >
                 Clear Text
+              </button>
+            </div>
+          </div>
+        )}
+
+        {isCropping && preview && (
+          <div className="fade-in" style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.9)', zIndex: 1000, display: 'flex', flexDirection: 'column' }}>
+            <div style={{ position: 'relative', flex: 1 }}>
+              <Cropper
+                image={preview}
+                crop={crop}
+                zoom={zoom}
+                aspect={endpoint === "/api/analyze-card" ? 1.58 : undefined} // 1.58 is common card aspect ratio
+                onCropChange={setCrop}
+                onCropComplete={onCropComplete}
+                onZoomChange={setZoom}
+              />
+            </div>
+            <div style={{ padding: '24px', background: 'white', display: 'flex', gap: '12px', alignItems: 'center' }}>
+              <div style={{ flex: 1 }}>
+                <p style={{ fontSize: '14px', fontWeight: '800', color: '#1e1b4b', marginBottom: '4px' }}>Adjust Crop</p>
+                <p style={{ fontSize: '12px', color: 'var(--text-muted)' }}>Pinch or scroll to zoom, drag to move</p>
+              </div>
+              <button
+                onClick={() => setIsCropping(false)}
+                className="btn-secondary"
+                style={{ height: '48px', padding: '0 24px' }}
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleCropSave}
+                className="btn-primary"
+                style={{ height: '48px', padding: '0 24px' }}
+              >
+                Done
               </button>
             </div>
           </div>

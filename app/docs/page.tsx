@@ -8,14 +8,14 @@ export default function Docs() {
     <div className="main-content" style={{ overflowY: 'auto' }}>
       <div className="workspace-container">
         <Link href="/" className="flex items-center gap-2 mb-12 text-primary no-underline font-bold">
-          <ChevronLeft size={18} /> Back to Dashboard
+          <ChevronLeft size={18} /> Back to Posting Job
         </Link>
 
         <div className="hero-section">
           <div className="hero-badge">
             <BookOpen size={12} /> DOCUMENTATION
           </div>
-          <h1 className="hero-title">How PlacementAI Works</h1>
+          <h1 className="hero-title">How CardAI Works</h1>
           <p className="hero-subtitle">Learn about our intelligent extraction engine and the specialized "Manvin" automation rules.</p>
         </div>
 

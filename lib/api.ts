@@ -22,6 +22,12 @@ export const api = {
     });
     return res;
   },
+  delete: async (endpoint: string) => {
+    const res = await fetch(`${API_URL}${endpoint}`, {
+      method: "DELETE",
+    });
+    return res;
+  },
   upload: async (endpoint: string, formData: FormData) => {
     const res = await fetch(`${API_URL}${endpoint}`, {
       method: "POST",

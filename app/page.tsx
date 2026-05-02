@@ -12,7 +12,7 @@ import { api } from "@/lib/api";
 import {
   Sparkles,
   History,
-  Briefcase,
+  Contact,
   PlusCircle,
   LayoutDashboard,
   Bot,
@@ -21,7 +21,8 @@ import {
   Search,
   FileText,
   Edit3,
-  Camera
+  Camera,
+  Trash2
 } from "lucide-react";
 
 export default function Home() {
@@ -112,20 +113,50 @@ export default function Home() {
       const data = await res.json();
 
       if (!res.ok || !data.placement) {
-        throw new Error(data.error || "Placement not found");
+        throw new Error(data.error || "Record not found");
       }
 
-      setCurrentPlacement({
-        id: data.placement.id,
-        extraction: JSON.parse(data.placement.extracted_data),
-        imagePath: api.imageUrl(data.placement.image_path),
-        companyName: data.placement.company_name,
-        sheetUrl: data.sheetUrl || sheetUrl // Keep existing or use new
-      });
-      if (data.sheetUrl) setSheetUrl(data.sheetUrl);
-      setView("details");
+      const extraction = JSON.parse(data.placement.extracted_data);
+      const isCard = extraction.card_type || extraction.industry || extraction.emails || extraction.phones;
+
+      if (isCard) {
+        setCurrentCard({
+          id: data.placement.id,
+          extraction: extraction,
+          imagePath: data.placement.image_path,
+          sheetUrl: data.sheetUrl || sheetUrl
+        });
+        if (data.sheetUrl) setSheetUrl(data.sheetUrl);
+        setView("cards");
+      } else {
+        setCurrentPlacement({
+          id: data.placement.id,
+          extraction: extraction,
+          imagePath: api.imageUrl(data.placement.image_path),
+          companyName: data.placement.company_name,
+          sheetUrl: data.sheetUrl || sheetUrl
+        });
+        if (data.sheetUrl) setSheetUrl(data.sheetUrl);
+        setView("details");
+      }
     } catch (err) {
       console.error("Failed to fetch detail:", err);
+    }
+  };
+
+  const handleDelete = async (e: React.MouseEvent, id: string) => {
+    e.stopPropagation();
+    if (!confirm("Are you sure you want to delete this record from history? (It will remain in Google Sheets)")) return;
+
+    try {
+      const res = await api.delete(`/api/placements/${id}`);
+      if (res.ok) {
+        fetchHistory();
+      } else {
+        alert("Failed to delete record");
+      }
+    } catch (err) {
+      console.error("Delete failed:", err);
     }
   };
 
@@ -149,9 +180,9 @@ export default function Home() {
       <aside className="sidebar">
         <div className="nav-logo">
           <div className="logo-icon">
-            <Briefcase size={22} />
+            <Contact size={22} />
           </div>
-          <h1 className="logo-text">PlacementAI</h1>
+          <h1 className="logo-text">CardAI</h1>
         </div>
 
         <nav className="nav-menu">
@@ -160,14 +191,14 @@ export default function Home() {
             className={`nav-link ${view === "upload" || view === "details" ? "active" : ""}`}
           >
             <LayoutDashboard size={20} />
-            <span>Dashboard</span>
+            <span>Posting Job</span>
           </button>
           <button
             onClick={() => setView("cards")}
             className={`nav-link ${view === "cards" ? "active" : ""}`}
           >
             <FileText size={20} />
-            <span>Card Registration</span>
+            <span>Visiting Card</span>
           </button>
           <button
             onClick={() => setView("history")}
@@ -201,7 +232,7 @@ export default function Home() {
               style={{ padding: '10px', fontSize: '13px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '12px', fontWeight: '700', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
             >
               <Camera size={16} />
-              <span>Card Scan</span>
+              <span>Visiting Card</span>
             </button>
             <button
               onClick={() => {
@@ -238,13 +269,13 @@ export default function Home() {
         <div className="md:hidden glass m-4 p-4 flex items-center justify-between sticky top-4 z-50">
           <div className="flex items-center gap-2">
             <div className="logo-icon" style={{ width: '32px', height: '32px', borderRadius: '8px' }}>
-              <Briefcase size={16} />
+              <Contact size={16} />
             </div>
-            <span className="font-bold text-primary">PlacementAI</span>
+            <span className="font-bold text-primary">CardAI</span>
           </div>
           <div className="flex items-center gap-3">
             <div className="hero-badge" style={{ margin: 0, padding: '4px 10px', fontSize: '10px' }}>
-              {view === 'upload' ? 'Dashboard' : view === 'cards' ? 'Card Scan' : view === 'history' ? 'History' : 'Details'}
+              {view === 'upload' ? 'Posting Job' : view === 'cards' ? 'Visiting Card' : view === 'history' ? 'History' : 'Details'}
             </div>
           </div>
         </div>
@@ -289,7 +320,7 @@ export default function Home() {
                           style={{ padding: '14px', background: 'white', border: '1px solid #e2e8f0', borderRadius: '16px', fontWeight: '700', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', color: '#1e1b4b', fontSize: '13px' }}
                         >
                           <Camera size={16} />
-                          <span>Card Scan</span>
+                          <span>Visiting Card</span>
                         </button>
                         <button
                           onClick={() => {
@@ -336,7 +367,7 @@ export default function Home() {
             <div className="fade-in">
               <div className="hero-section">
                 <div className="hero-badge" style={{ background: '#f59e0b15', color: '#f59e0b' }}>
-                  <Camera size={12} /> CARD REGISTRATION
+                  <Camera size={12} /> VISITING CARD
                 </div>
                 <h2 className="hero-title">
                   Scan Registration & <br />
@@ -509,8 +540,31 @@ export default function Home() {
                             {new Date(item.created_at).toLocaleDateString()}
                           </div>
                         </div>
-                        <div className="logo-icon" style={{ width: '32px', height: '32px', borderRadius: '8px' }}>
-                          <ChevronRight size={18} />
+                        <div className="flex gap-2">
+                          <button
+                            onClick={(e) => handleDelete(e, item.id)}
+                            style={{ 
+                              width: '32px', 
+                              height: '32px', 
+                              borderRadius: '8px', 
+                              background: '#fee2e2', 
+                              color: '#ef4444', 
+                              border: 'none', 
+                              cursor: 'pointer',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              transition: 'all 0.2s ease'
+                            }}
+                            onMouseOver={(e) => (e.currentTarget.style.background = '#fecaca')}
+                            onMouseOut={(e) => (e.currentTarget.style.background = '#fee2e2')}
+                            title="Delete from history"
+                          >
+                            <Trash2 size={16} />
+                          </button>
+                          <div className="logo-icon" style={{ width: '32px', height: '32px', borderRadius: '8px' }}>
+                            <ChevronRight size={18} />
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -526,9 +580,9 @@ export default function Home() {
           <div className="footer-container">
             <div className="footer-brand">
               <div className="logo-icon footer-logo">
-                <Briefcase size={16} />
+                <Contact size={16} />
               </div>
-              <span className="footer-logo-text">PlacementAI</span>
+              <span className="footer-logo-text">CardAI</span>
             </div>
 
             <p className="footer-credits">
@@ -549,7 +603,7 @@ export default function Home() {
           className={`bottom-nav-item ${view === "upload" || view === "details" ? "active" : ""}`}
         >
           <LayoutDashboard size={22} />
-          <span>Dashboard</span>
+          <span>Posting Job</span>
         </button>
         
         <button 
@@ -559,7 +613,7 @@ export default function Home() {
           <div className="fab-button">
             <Camera size={24} />
           </div>
-          <span>Scan Card</span>
+          <span>Visiting Card</span>
         </button>
 
         <button 

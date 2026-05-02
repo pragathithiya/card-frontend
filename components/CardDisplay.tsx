@@ -1,16 +1,18 @@
 "use client";
 
-import { User, Building2, Mail, Phone, Globe, MapPin, BadgeCheck, FileText } from "lucide-react";
+import { User, Building2, Mail, Phone, Globe, MapPin, BadgeCheck, FileText, Sparkles } from "lucide-react";
 
 interface CardDisplayProps {
   data: {
     name?: string;
     designation?: string;
     company_name?: string;
-    email?: string;
-    phone?: string;
+    emails?: string[];
+    phones?: string[];
     website?: string;
     address?: string;
+    industry?: string;
+    others?: string;
     card_type?: string;
   };
   imagePath?: string;
@@ -40,10 +42,12 @@ export default function CardDisplay({ data, imagePath }: CardDisplayProps) {
             <DetailItem icon={User} label="Name" value={data.name} />
             <DetailItem icon={BadgeCheck} label="Designation" value={data.designation} />
             <DetailItem icon={Building2} label="Company" value={data.company_name} />
-            <DetailItem icon={Mail} label="Email" value={data.email} />
-            <DetailItem icon={Phone} label="Phone" value={data.phone} />
+            <DetailItem icon={Sparkles} label="Industry" value={data.industry} />
+            <DetailItem icon={Mail} label="Emails" value={data.emails?.join(", ")} />
+            <DetailItem icon={Phone} label="Phones" value={data.phones?.join(", ")} />
             <DetailItem icon={Globe} label="Website" value={data.website} />
             <DetailItem icon={MapPin} label="Address" value={data.address} />
+            <DetailItem icon={FileText} label="Others" value={data.others} />
           </div>
         </div>
 
