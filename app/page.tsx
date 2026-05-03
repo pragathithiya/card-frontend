@@ -182,7 +182,7 @@ export default function Home() {
           <div className="logo-icon">
             <Contact size={22} />
           </div>
-          <h1 className="logo-text">CardAI</h1>
+          <h1 className="logo-text">Manvian</h1>
         </div>
 
         <nav className="nav-menu">
@@ -197,7 +197,7 @@ export default function Home() {
             onClick={() => setView("cards")}
             className={`nav-link ${view === "cards" ? "active" : ""}`}
           >
-            <FileText size={20} />
+            <img src="/icons/visiting-card.png" alt="Card" style={{ width: '20px', height: '20px', objectFit: 'contain', filter: view === "cards" ? 'none' : 'grayscale(1) opacity(0.5)' }} />
             <span>Visiting Card</span>
           </button>
           <button
@@ -218,20 +218,13 @@ export default function Home() {
             Scan a new placement poster or visiting card.
           </p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            <button
-              onClick={() => setView("upload")}
-              className="btn-primary w-full"
-              style={{ padding: '10px', fontSize: '13px' }}
-            >
-              <PlusCircle size={16} />
-              <span>New Job Scan</span>
-            </button>
+
             <button
               onClick={() => setView("cards")}
               className="btn-secondary w-full"
               style={{ padding: '10px', fontSize: '13px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '12px', fontWeight: '700', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
             >
-              <Camera size={16} />
+              <img src="/icons/visiting-card.png" alt="Card" style={{ width: '16px', height: '16px', objectFit: 'contain' }} />
               <span>Visiting Card</span>
             </button>
             <button
@@ -271,7 +264,7 @@ export default function Home() {
             <div className="logo-icon" style={{ width: '32px', height: '32px', borderRadius: '8px' }}>
               <Contact size={16} />
             </div>
-            <span className="font-bold text-primary">CardAI</span>
+            <span className="font-bold text-primary">Manvian</span>
           </div>
           <div className="flex items-center gap-3">
             <div className="hero-badge" style={{ margin: 0, padding: '4px 10px', fontSize: '10px' }}>
@@ -306,20 +299,13 @@ export default function Home() {
                       Quickly scan a new poster or card, or enter details manually.
                     </p>
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '12px' }}>
-                      <button
-                        onClick={() => setView("upload")}
-                        className="btn-primary w-full"
-                        style={{ padding: '14px', borderRadius: '16px' }}
-                      >
-                        <PlusCircle size={18} />
-                        <span>New Job Scan</span>
-                      </button>
+
                       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
                         <button
                           onClick={() => setView("cards")}
                           style={{ padding: '14px', background: 'white', border: '1px solid #e2e8f0', borderRadius: '16px', fontWeight: '700', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', color: '#1e1b4b', fontSize: '13px' }}
                         >
-                          <Camera size={16} />
+                          <img src="/icons/visiting-card.png" alt="Card" style={{ width: '16px', height: '16px', objectFit: 'contain' }} />
                           <span>Visiting Card</span>
                         </button>
                         <button
@@ -347,17 +333,15 @@ export default function Home() {
 
               <div className="feature-cards">
                 {[
-                  { icon: Search, color: "#3b82f6", title: "Llama 4 OCR", desc: "Advanced vision extraction." },
-                  { icon: Sparkles, color: "#8b5cf6", title: "Job Auto-fill", desc: "Forms filled in 1-click." },
-                  { icon: Clock, color: "#6366f1", title: "Manvin Rules", desc: "Automatic internship logic." }
+                  { icon: Clock, color: "#6366f1", title: "Manvian Rules", desc: "Automatic internship logic.", link: "/docs" }
                 ].map((item, i) => (
-                  <div key={i} className="feature-card">
+                  <Link href={item.link} key={i} className="feature-card" style={{ textDecoration: 'none', display: 'block' }}>
                     <div className="logo-icon" style={{ background: `${item.color}15`, color: item.color, marginBottom: '20px' }}>
                       <item.icon size={22} />
                     </div>
-                    <h4 style={{ fontSize: '18px', fontWeight: '800', marginBottom: '8px' }}>{item.title}</h4>
+                    <h4 style={{ fontSize: '18px', fontWeight: '800', marginBottom: '8px', color: '#1e1b4b' }}>{item.title}</h4>
                     <p style={{ fontSize: '14px', color: 'var(--text-muted)' }}>{item.desc}</p>
-                  </div>
+                  </Link>
                 ))}
               </div>
             </div>
@@ -367,7 +351,7 @@ export default function Home() {
             <div className="fade-in">
               <div className="hero-section">
                 <div className="hero-badge" style={{ background: '#f59e0b15', color: '#f59e0b' }}>
-                  <Camera size={12} /> VISITING CARD
+                  <img src="/icons/visiting-card.png" alt="Card" style={{ width: '12px', height: '12px', objectFit: 'contain', marginRight: '4px' }} /> VISITING CARD
                 </div>
                 <h2 className="hero-title">
                   Scan Registration & <br />
@@ -518,12 +502,31 @@ export default function Home() {
                       className="glass-panel"
                       style={{ padding: '20px', cursor: 'pointer', transition: 'all 0.3s ease' }}
                     >
-                      <div style={{ height: '200px', background: '#f8fafc', borderRadius: '16px', marginBottom: '20px', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <div style={{ height: '200px', background: '#f8fafc', borderRadius: '16px', marginBottom: '20px', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
                         {item.image_path ? (
                           <img
                             src={api.imageUrl(item.image_path)}
                             alt={item.company_name}
+                            className="history-thumb"
                             style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+                            onError={(e) => {
+                              // If image fails to load, replace it with a fallback
+                              const target = e.target as HTMLImageElement;
+                              target.style.display = 'none';
+                              const parent = target.parentElement;
+                              if (parent) {
+                                const fallback = document.createElement('div');
+                                fallback.className = 'flex flex-col items-center justify-center text-text-muted';
+                                fallback.innerHTML = `
+                                  <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="opacity: 0.2; margin-bottom: 12px;">
+                                    <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path>
+                                    <polyline points="14 2 14 8 20 8"></polyline>
+                                  </svg>
+                                  <p style="font-size: 10px; font-weight: 700; opacity: 0.5;">Image unavailable</p>
+                                `;
+                                parent.appendChild(fallback);
+                              }
+                            }}
                           />
                         ) : (
                           <div style={{ textAlign: 'center', color: 'var(--text-muted)' }}>
@@ -582,7 +585,7 @@ export default function Home() {
               <div className="logo-icon footer-logo">
                 <Contact size={16} />
               </div>
-              <span className="footer-logo-text">CardAI</span>
+              <span className="footer-logo-text">Manvian</span>
             </div>
 
             <p className="footer-credits">
@@ -611,7 +614,7 @@ export default function Home() {
           className={`bottom-nav-item ${view === "cards" ? "active" : ""}`}
         >
           <div className="fab-button">
-            <Camera size={24} />
+            <img src="/icons/visiting-card.png" alt="Card" style={{ width: '24px', height: '24px', objectFit: 'contain' }} />
           </div>
           <span>Visiting Card</span>
         </button>

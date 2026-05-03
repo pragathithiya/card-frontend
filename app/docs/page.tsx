@@ -15,7 +15,7 @@ export default function Docs() {
           <div className="hero-badge">
             <BookOpen size={12} /> DOCUMENTATION
           </div>
-          <h1 className="hero-title">How CardAI Works</h1>
+          <h1 className="hero-title">How Manvian Works</h1>
           <p className="hero-subtitle">Learn about our intelligent extraction engine and the specialized "Manvin" automation rules.</p>
         </div>
 

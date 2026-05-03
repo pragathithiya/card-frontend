@@ -1,16 +1,16 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { 
-  Building2, 
-  MapPin, 
-  Clock, 
-  IndianRupee, 
-  Briefcase, 
-  Globe, 
-  Save, 
-  Edit3, 
-  Loader2, 
+import {
+  Building2,
+  MapPin,
+  Clock,
+  IndianRupee,
+  Briefcase,
+  Globe,
+  Save,
+  Edit3,
+  Loader2,
   Sparkles,
   Gift,
   Award,
@@ -81,76 +81,92 @@ export default function JobForm({ initialData, onSave }: JobFormProps) {
   };
 
   return (
-    <div className="glass-panel responsive-card">
-      <div className="flex items-center gap-3 mb-8">
-        <div className="logo-icon" style={{ width: '48px', height: '48px', borderRadius: '12px' }}>
-          <Edit3 size={24} />
+    <div className="glass-panel responsive-card" style={{ padding: '40px' }}>
+      <div className="flex items-center gap-4 mb-10">
+        <div className="logo-icon" style={{ width: '56px', height: '56px', borderRadius: '16px', flexShrink: 0, background: 'linear-gradient(135deg, var(--primary), #6366f1)' }}>
+          <Edit3 size={28} color="white" />
         </div>
         <div>
-          <div className="flex items-center gap-2">
-            <h3 style={{ fontSize: '24px', fontWeight: '900', color: '#1e1b4b' }}>Finalize Job Post</h3>
-            {initialData && Object.keys(initialData).length > 0 && (
-              <span className="hero-badge" style={{ margin: 0, padding: '2px 8px', fontSize: '10px', background: '#f5f3ff', border: '1px solid #ddd6fe' }}>
-                <Sparkles size={10} className="text-primary" /> AI AUTO-FILLED
-              </span>
-            )}
-          </div>
-          <p style={{ fontSize: '14px', color: 'var(--text-muted)' }}>Review and refine the auto-filled details below.</p>
+          <h3 style={{ fontSize: '28px', fontWeight: '900', color: '#1e1b4b', lineHeight: '1.2' }}>Finalize Job Post</h3>
+          <p style={{ fontSize: '14px', color: 'var(--text-muted)', marginTop: '4px' }}>Review and refine the details below.</p>
         </div>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-10">
+      <form onSubmit={handleSubmit} className="space-y-12">
         {/* Basic Info Section */}
         <section>
-          <div className="flex items-center gap-2 mb-6">
-            <div style={{ width: '4px', height: '16px', background: 'var(--primary)', borderRadius: '2px' }}></div>
-            <h4 style={{ fontSize: '14px', fontWeight: '800', color: '#1e1b4b', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Basic Information</h4>
+          <div className="flex items-center gap-3 mb-8">
+            <div style={{ width: '5px', height: '24px', background: 'var(--primary)', borderRadius: '10px' }}></div>
+            <h4 style={{ fontSize: '15px', fontWeight: '900', color: '#1e1b4b', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Basic Information</h4>
           </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="space-y-2">
-              <label className="data-label flex items-center gap-2"><Building2 size={14} /> Company Name</label>
-              <input type="text" name="company_name" value={formData.company_name} onChange={handleChange} className="input-field" placeholder="e.g., Manvin" required />
+
+          <div className="grid grid-cols-1 md:grid-cols-2" style={{ columnGap: '40px', rowGap: '24px' }}>
+            <div className="space-y-3">
+              <label className="data-label flex items-center gap-2.5 font-bold text-slate-700">
+                <Building2 size={16} className="text-primary" />
+                <span>COMPANY NAME</span>
+              </label>
+              <input type="text" name="company_name" value={formData.company_name} onChange={handleChange} className="input-field" placeholder="e.g., Manvian" required />
             </div>
-            <div className="space-y-2">
-              <label className="data-label flex items-center gap-2"><Briefcase size={14} /> Job Role</label>
+            <div className="space-y-3">
+              <label className="data-label flex items-center gap-2.5 font-bold text-slate-700">
+                <Briefcase size={16} className="text-primary" />
+                <span>JOB ROLE</span>
+              </label>
               <input type="text" name="job_role" value={formData.job_role} onChange={handleChange} className="input-field" placeholder="e.g., Full Stack Developer" required />
             </div>
-            <div className="space-y-2">
-              <label className="data-label flex items-center gap-2"><MapPin size={14} /> Location</label>
+            <div className="space-y-3">
+              <label className="data-label flex items-center gap-2.5 font-bold text-slate-700">
+                <MapPin size={16} className="text-primary" />
+                <span>LOCATION</span>
+              </label>
               <input type="text" name="location" value={formData.location} onChange={handleChange} className="input-field" placeholder="e.g., Bangalore, India" />
             </div>
-            <div className="space-y-2">
-              <label className="data-label flex items-center gap-2"><Globe size={14} /> Work Mode</label>
-              <select name="mode" value={formData.mode} onChange={handleChange} className="input-field" style={{ background: 'white' }}>
-                <option value="">Select Mode</option>
-                <option value="On-site">On-site</option>
-                <option value="Remote">Remote</option>
-                <option value="Hybrid">Hybrid</option>
-                <option value="Work from Home">Work from Home</option>
-              </select>
+            <div className="space-y-3">
+              <label className="data-label flex items-center gap-2.5 font-bold text-slate-700">
+                <Globe size={16} className="text-primary" />
+                <span>WORK MODE</span>
+              </label>
+              <div style={{ position: 'relative' }}>
+                <select name="mode" value={formData.mode} onChange={handleChange} className="input-field appearance-none" style={{ background: 'white' }}>
+                  <option value="">Select Mode</option>
+                  <option value="On-site">On-site</option>
+                  <option value="Remote">Remote</option>
+                  <option value="Hybrid">Hybrid</option>
+                  <option value="Work from Home">Work from Home</option>
+                </select>
+              </div>
             </div>
           </div>
         </section>
 
         {/* Compensation & Duration Section */}
         <section>
-          <div className="flex items-center gap-2 mb-6">
-            <div style={{ width: '4px', height: '16px', background: 'var(--primary)', borderRadius: '2px' }}></div>
-            <h4 style={{ fontSize: '14px', fontWeight: '800', color: '#1e1b4b', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Compensation & Timeline</h4>
+          <div className="flex items-center gap-3 mb-8">
+            <div style={{ width: '5px', height: '24px', background: 'var(--primary)', borderRadius: '10px' }}></div>
+            <h4 style={{ fontSize: '15px', fontWeight: '900', color: '#1e1b4b', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Compensation & Timeline</h4>
           </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="space-y-2">
-              <label className="data-label flex items-center gap-2"><Clock size={14} /> Duration</label>
+
+          <div className="grid grid-cols-1 md:grid-cols-3" style={{ columnGap: '32px', rowGap: '24px' }}>
+            <div className="space-y-3">
+              <label className="data-label flex items-center gap-2.5 font-bold text-slate-700">
+                <Clock size={16} className="text-primary" />
+                <span>DURATION</span>
+              </label>
               <input type="text" name="duration" value={formData.duration} onChange={handleChange} className="input-field" placeholder="e.g., 6 Months" />
             </div>
-            <div className="space-y-2">
-              <label className="data-label flex items-center gap-2"><Zap size={14} /> Stipend</label>
+            <div className="space-y-3">
+              <label className="data-label flex items-center gap-2.5 font-bold text-slate-700">
+                <Zap size={16} className="text-primary" />
+                <span>STIPEND</span>
+              </label>
               <input type="text" name="stipend" value={formData.stipend} onChange={handleChange} className="input-field" placeholder="For Internships" />
             </div>
-            <div className="space-y-2">
-              <label className="data-label flex items-center gap-2"><IndianRupee size={14} /> Full Salary</label>
+            <div className="space-y-3">
+              <label className="data-label flex items-center gap-2.5 font-bold text-slate-700">
+                <IndianRupee size={16} className="text-primary" />
+                <span>FULL SALARY</span>
+              </label>
               <input type="text" name="salary" value={formData.salary} onChange={handleChange} className="input-field" placeholder="For Full-time" />
             </div>
           </div>
@@ -158,61 +174,79 @@ export default function JobForm({ initialData, onSave }: JobFormProps) {
 
         {/* Requirements & Benefits Section */}
         <section>
-          <div className="flex items-center gap-2 mb-6">
-            <div style={{ width: '4px', height: '16px', background: 'var(--primary)', borderRadius: '2px' }}></div>
-            <h4 style={{ fontSize: '14px', fontWeight: '800', color: '#1e1b4b', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Requirements & Perks</h4>
+          <div className="flex items-center gap-3 mb-8">
+            <div style={{ width: '5px', height: '24px', background: 'var(--primary)', borderRadius: '10px' }}></div>
+            <h4 style={{ fontSize: '15px', fontWeight: '900', color: '#1e1b4b', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Requirements & Perks</h4>
           </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="space-y-2">
-              <label className="data-label flex items-center gap-2"><Award size={14} /> Qualification</label>
+
+          <div className="grid grid-cols-1 md:grid-cols-2" style={{ columnGap: '40px', rowGap: '24px' }}>
+            <div className="space-y-3">
+              <label className="data-label flex items-center gap-2.5 font-bold text-slate-700">
+                <Award size={16} className="text-primary" />
+                <span>QUALIFICATION</span>
+              </label>
               <input type="text" name="qualification" value={formData.qualification} onChange={handleChange} className="input-field" placeholder="e.g., B.Tech, MCA" />
             </div>
-            <div className="space-y-2">
-              <label className="data-label flex items-center gap-2"><BarChart size={14} /> Experience</label>
+            <div className="space-y-3">
+              <label className="data-label flex items-center gap-2.5 font-bold text-slate-700">
+                <BarChart size={16} className="text-primary" />
+                <span>EXPERIENCE</span>
+              </label>
               <input type="text" name="experience" value={formData.experience} onChange={handleChange} className="input-field" placeholder="e.g., Fresher or 2+ years" />
             </div>
-            <div className="space-y-2 md:col-span-2">
-              <label className="data-label flex items-center gap-2"><Lightbulb size={14} /> Key Skills</label>
+            <div className="space-y-3 md:col-span-2">
+              <label className="data-label flex items-center gap-2.5 font-bold text-slate-700">
+                <Lightbulb size={16} className="text-primary" />
+                <span>KEY SKILLS</span>
+              </label>
               <input type="text" name="skills" value={formData.skills} onChange={handleChange} className="input-field" placeholder="e.g., React, Node.js, SQL" />
             </div>
-            <div className="space-y-2 md:col-span-2">
-              <label className="data-label flex items-center gap-2"><Gift size={14} /> Benefits</label>
-              <textarea name="benefits" value={formData.benefits} onChange={handleChange} className="input-field" placeholder="e.g., Free meals, Insurance, Cabs" style={{ height: '80px', resize: 'none' }} />
+            <div className="space-y-3 md:col-span-2">
+              <label className="data-label flex items-center gap-2.5 font-bold text-slate-700">
+                <Gift size={16} className="text-primary" />
+                <span>BENEFITS</span>
+              </label>
+              <textarea name="benefits" value={formData.benefits} onChange={handleChange} className="input-field" placeholder="e.g., Free meals, Insurance, Cabs" style={{ height: '100px', resize: 'none', padding: '16px' }} />
             </div>
           </div>
         </section>
 
         {/* HR Contact Section */}
         <section>
-          <div className="flex items-center gap-2 mb-6">
-            <div style={{ width: '4px', height: '16px', background: 'var(--primary)', borderRadius: '2px' }}></div>
-            <h4 style={{ fontSize: '14px', fontWeight: '800', color: '#1e1b4b', textTransform: 'uppercase', letterSpacing: '0.05em' }}>HR Contact Details</h4>
+          <div className="flex items-center gap-3 mb-8">
+            <div style={{ width: '5px', height: '24px', background: 'var(--primary)', borderRadius: '10px' }}></div>
+            <h4 style={{ fontSize: '15px', fontWeight: '900', color: '#1e1b4b', textTransform: 'uppercase', letterSpacing: '0.1em' }}>HR Contact Details</h4>
           </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="space-y-2">
-              <label className="data-label flex items-center gap-2"><User size={14} /> Contact Person</label>
+
+          <div className="grid grid-cols-1 md:grid-cols-2" style={{ columnGap: '40px', rowGap: '24px' }}>
+            <div className="space-y-3">
+              <label className="data-label flex items-center gap-2.5 font-bold text-slate-700">
+                <User size={16} className="text-primary" />
+                <span>CONTACT PERSON</span>
+              </label>
               <input type="text" name="hr_name" value={formData.hr_name} onChange={handleChange} className="input-field" placeholder="Name of HR" />
             </div>
-            <div className="space-y-2">
-              <label className="data-label flex items-center gap-2"><Phone size={14} /> Contact Number</label>
+            <div className="space-y-3">
+              <label className="data-label flex items-center gap-2.5 font-bold text-slate-700">
+                <Phone size={16} className="text-primary" />
+                <span>CONTACT NUMBER</span>
+              </label>
               <input type="text" name="hr_phone" value={formData.hr_phone} onChange={handleChange} className="input-field" placeholder="Number for inquiries" />
             </div>
           </div>
         </section>
 
-        <div className="pt-8 border-t border-glass-border">
-          <button type="submit" disabled={saving} className="btn-primary w-full shadow-lg" style={{ padding: '18px' }}>
+        <div style={{ marginTop: '56px' }}>
+          <button type="submit" disabled={saving} className="btn-primary w-full shadow-xl" style={{ padding: '20px', borderRadius: '16px', fontSize: '16px', fontWeight: '800' }}>
             {saving ? (
               <>
-                <Loader2 className="animate-spin" size={20} />
+                <Loader2 className="animate-spin" size={24} />
                 <span>SAVING POST DATA...</span>
               </>
             ) : (
               <>
-                <Save size={20} />
-                <span style={{ letterSpacing: '0.05em' }}>GENERATE & SAVE POST</span>
+                <Save size={24} />
+                <span style={{ letterSpacing: '0.1em' }}>GENERATE & SAVE POST</span>
               </>
             )}
           </button>

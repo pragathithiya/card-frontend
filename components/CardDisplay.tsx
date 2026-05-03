@@ -26,12 +26,11 @@ export default function CardDisplay({ data, imagePath }: CardDisplayProps) {
         {/* Card Data Panel */}
         <div className="glass-panel responsive-card">
           <div className="flex items-center gap-3 mb-8">
-            <div className="logo-icon" style={{ background: '#3b82f615', color: '#3b82f6' }}>
-              <BadgeCheck size={20} />
+            <div className="logo-icon" style={{ background: data.card_type === 'Visiting' ? '#f59e0b15' : '#10b98115', color: data.card_type === 'Visiting' ? '#f59e0b' : '#10b981', flexShrink: 0, overflow: 'hidden' }}>
+              <img src="/icons/visiting-card.png" alt="Card" style={{ width: '22px', height: '22px', objectFit: 'contain' }} />
             </div>
             <div>
               <h3 style={{ fontSize: '20px', fontWeight: '900', color: '#1e1b4b' }}>Extracted Details</h3>
-              <p style={{ fontSize: '12px', color: 'var(--text-muted)' }}>Verified by Gemini Vision</p>
             </div>
             <div style={{ marginLeft: 'auto', background: data.card_type === 'Visiting' ? '#f59e0b15' : '#10b98115', color: data.card_type === 'Visiting' ? '#f59e0b' : '#10b981', padding: '4px 12px', borderRadius: '20px', fontSize: '10px', fontWeight: '800', border: '1px solid currentColor' }}>
               {data.card_type?.toUpperCase() || 'CARD'}
